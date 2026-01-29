@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Analysis - Mr. B (OOB Server)</title>
+    <link href='https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300&display=swap' rel='stylesheet'>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #000;
+            color: #00ff41;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle, #050505 0%, #000 100%);
+        }
+
+        #scramble-text {
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            font-weight: 300;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+            white-space: pre-wrap;
+        }
+
+        .dud {
+            opacity: 0.2;
+            color: #00ff41;
+        }
+
+        .fixed-char {
+            color: #d1d1d1;
+            transition: color 0.5s ease;
+        }
+
+        /* Small label in the corner for server identity */
+        .server-label {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 10px;
+            color: #004411;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="scramble-text"></div>
+    <div class="server-label">OOB Analysis Node // Mr. B</div>
+
+    <script>
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                this.chars = '!<>-_\\/[]{}—=+*^?#________';
+                this.update = this.update.bind(this);
+            }
+            
+            setText(newText) {
+                const oldText = this.el.innerText;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40);
+                    const end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
+                }
+                
+                cancelAnimationFrame(this.frameRequest);
+                this.frame = 0;
+                this.update();
+                return promise;
+            }
+            
+            update() {
+                let output = '';
+                let complete = 0;
+                
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    
+                    if (this.frame >= end) {
+                        complete++;
+                        output += `<span class="fixed-char">${to}</span>`;
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) {
+                            char = this.randomChar();
+                            this.queue[i].char = char;
+                        }
+                        output += `<span class="dud">${char}</span>`;
+                    } else {
+                        output += from;
+                    }
+                }
+                
+                this.el.innerHTML = output;
+                
+                if (complete === this.queue.length) {
+                    this.resolve();
+                } else {
+                    this.frameRequest = requestAnimationFrame(this.update);
+                    this.frame++;
+                }
+            }
+            
+            randomChar() {
+                return this.chars[Math.floor(Math.random() * this.chars.length)];
+            }
+        }
+
+        const phrases = [
+            'This server operates as an OOB (Out-of-Band) Listener',
+            'We are capturing interactions for analysis purposes',
+            'If you see this address, your system is being studied',
+            'Out-of-Band analysis is performed to map security vulnerabilities',
+            'Just a routine procedure for infrastructure strengthening',
+            'Interactions are captured safely without service disruption',
+            'Mr. B: Understanding systems through out-of-band communication',
+            'Thank you for being part of this security enhancement'
+        ];
+
+        const el = document.getElementById('scramble-text');
+        const fx = new TextScramble(el);
+
+        let counter = 0;
+        const next = () => {
+            fx.setText(phrases[counter]).then(() => {
+                setTimeout(next, 4500);
+            });
+            counter = (counter + 1) % phrases.length;
+        };
+
+        window.onload = () => {
+            next();
+        };
+    </script>
+</body>
+</html>
