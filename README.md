@@ -32,12 +32,12 @@ Pastikan Anda menjalankan ini sebagai **root** pada server **Debian 12+** atau *
 
 ### **1\. Unduh Installer**
 
-wget \[https://raw.githubusercontent.com/username-anda/AutoOBB/main/interactsh-install-v3.sh\](https://raw.githubusercontent.com/username-anda/AutoOBB/main/interactsh-install-v3.sh)  
+wget \[https://github.com/Bernic777/AutoOBB/blob/main/main.sh\](https://github.com/Bernic777/AutoOBB/blob/main/main.sh)  
 chmod \+x interactsh-install-v3.sh
 
 ### **2\. Jalankan Instalasi**
 
-sudo ./interactsh-install-v3.sh \-d domainanda.com \-t token\_rahasia\_anda
+sudo ./main.sh \-d domainanda.com \-t token\_rahasia\_anda
 
 ### **3\. Flag Penggunaan**
 
@@ -78,10 +78,4 @@ interactsh-client \-server domainanda.com \-token token\_rahasia\_anda
 
 ## **⚖️ Lisensi**
 
-Didistribusikan di bawah Lisensi MIT. Lihat file LICENSE untuk informasi lebih lanjut.
-
-\<p align="center"\>
-
-\<b\>Dibuat dengan ❤️ untuk Komunitas Bug Bounty\</b\>
-
-\</p\>
+no
